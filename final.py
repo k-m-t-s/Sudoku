@@ -59,6 +59,13 @@ class box:
 class algorithm:
     def __init__(self) -> None:
         pass
+    def row(self, numrow):
+        for x in range(9):
+            board[numrow][x]
+    def column(self, numcolumn):
+        for x in range(9):
+            board[x][numcolumn]
+
     def horizontalcheck(self):
         for x in range(9):
             pass
@@ -126,5 +133,3 @@ def main():
         clock.tick(FPS)
     pg.quit()
 main()
-commits = 0
-## work
