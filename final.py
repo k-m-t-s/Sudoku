@@ -8,6 +8,8 @@ window = pg.display.set_mode((450,450))
 xcounter = -1
 ycounter = 0
 board = []
+lists2 =[]
+
 
 class highlightbox:
     def __init__(self,x,y,w,h) -> None:
@@ -60,18 +62,76 @@ class algorithm:
     def __init__(self) -> None:
         pass
     def row(self, numrow):
-        for x in range(9):
-            board[numrow][x]
-    def column(self, numcolumn):
-        for x in range(9):
-            board[x][numcolumn]
+        row = []
+        for x in range(8):
+            row.append(board[numrow][x])
+        return row
 
+    def column(self, numcolumn):
+        column =[]
+        for x in range(8):
+            column.append(board[x][numcolumn])
+        return column
+    def block(self, numblock):
+        # 123
+        # 456
+        # 789
+        if numblock == 1:
+            fx, fy = 0,0
+        elif numblock == 2:
+            fx, fy = 3,0
+        elif numblock == 3:
+            fx, fy = 6,0
+        elif numblock == 4:
+            fx, fy = 0,3
+        elif numblock == 5:
+            fx, fy = 3,3
+        elif numblock == 6:
+            fx, fy = 6,3
+        elif numblock == 1:
+            fx, fy = 0,6
+        elif numblock == 8:
+            fx, fy = 3,6
+        elif numblock == 9:
+            fx, fy = 6,6   
+        else:
+            print("ERROR ON BLOCK")
+        solid = []
+        for y in range(3):
+            for x in range(3):
+                solid.append((board[y+fy][x+fx]))
+        return solid
+    def possibilities():
+        global lists2
+        for x in range(2):
+            lists2.append([])
+            for y in range(9):
+                lists2[x].append([])
+                for z in range(9):
+                    lists2[x][y].append([])
+        for x in range (9):
+            for y in range(9):
+                lists2[0][y][x] = board[y][x]
+        for x in range (9):
+            for y in range(9):
+                lists2[1][y][x] = [1,2,3,4,5,6,7,8,9]
+        for x in range (9):
+            for y in range(9):
+                if board[x][y] == 0:
+                    lists2[1][y][x] = [-1]
     def horizontalcheck(self):
         for x in range(9):
-            pass
+            for y in range(9):
+                if board[y][x] != 0:
+                    for ychange in range(9):
+                        lists2[1][ychange][x].remove(board[y][x])
     def verticalcheck(self):
-        pass
+        for x in range(9):
+            for y in range(9):
+                if board[y][x] != 0:
+                    lists2[1][y][x].remove(board[y][x])
     def blockcheck(self):
+
         pass
 
 def num():
@@ -98,7 +158,7 @@ def num():
             ycounter = 1
     if str(board[ycounter][xcounter])==("0"):
         board[ycounter][xcounter] = ""
-    return str(board[ycounter][xcounter])
+    return board[ycounter][xcounter]
 
     
 def main():
@@ -108,7 +168,7 @@ def main():
     run = True
     for x in range(0,450,50):
         for y in range(0,450,50):
-            box1 = box(y,x,50,50,num())
+            box1 = box(y,x,50,50,str(num()))
             boxes.append(box1)
     
     for x in range(0,450,150):
