@@ -126,14 +126,14 @@ class algorithm:
         #horizontal
         for y in range(9):
             for x in range(9):
-                    if board[y][x] != 0:
+                    if not board[y][x] == 0 or lists2[1][y][x].__len__() == 1:
                         for xchange in range(9):
                             if lists2[1][y][xchange].__contains__(board[y][x]):
                                 lists2[1][y][xchange].remove(board[y][x])
         #vertical
         for y in range(9):
             for x in range(9):
-                if board[y][x] != 0:
+                if not board[y][x] == 0 or lists2[1][y][x].__len__() == 1:
                     for ychange in range(9):
                         if lists2[1][ychange][x].__contains__(board[y][x]):
                             lists2[1][ychange][x].remove(board[y][x])
@@ -253,4 +253,3 @@ def main():
         clock.tick(FPS)
     pg.quit()
 main()
-lists2.co
