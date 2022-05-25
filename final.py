@@ -126,14 +126,14 @@ class algorithm:
         #horizontal
         for y in range(9):
             for x in range(9):
-                    if not board[y][x] == 0 or lists2[1][y][x].__len__() == 1:
+                    if not board[y][x] == 0:
                         for xchange in range(9):
                             if lists2[1][y][xchange].__contains__(board[y][x]):
                                 lists2[1][y][xchange].remove(board[y][x])
         #vertical
         for y in range(9):
             for x in range(9):
-                if not board[y][x] == 0 or lists2[1][y][x].__len__() == 1:
+                if not board[y][x] == 0:
                     for ychange in range(9):
                         if lists2[1][ychange][x].__contains__(board[y][x]):
                             lists2[1][ychange][x].remove(board[y][x])
@@ -146,24 +146,304 @@ class algorithm:
                         for xchange in range(3):
                             if lists2[1][ychange+fy][xchange+fx].__contains__(board[y+fy][x+fx]):
                                 lists2[1][ychange+fy][xchange+fx].remove(board[y+fy][x+fx])
+        #clears the single possibilities on the other place in the same block
+        for blockno in range(1,10):
+            self.block(blockno)
+            for y in range(3):
+                for x in range(3):
+                    if lists2[1][y+fy][x+fx].__len__() == 1 and lists2[1][y+fy][x+fx] != [-1]:
+                        convertinto = 0
+                        for r in lists2[1][y+fy][x+fx]:
+                            convertinto = r
+                        for a in range(3):
+                            for b in range(3):
+                                if lists2[1][fy+a][fx+b].__contains__(convertinto) and lists2[1][fy+a][fx+b].__len__() != 1:
+                                    lists2[1][fy+a][fx+b].remove(convertinto)
+        for y in range(9):
+            for x in range(9):
+                if lists2[1][y][x].__len__() == 1 and lists2[1][y][x] != [-1]:
+                        convertinto = 0
+                        for r in lists2[1][y][x]:
+                            convertinto = r
+                        for ychange in range(9):
+                            if lists2[1][ychange][x].__contains__(convertinto) and lists2[1][ychange][x].__len__() != 1:
+                                lists2[1][ychange][x].remove(convertinto)
+        for y in range(9):
+            for x in range(9):
+                if lists2[1][y][x].__len__() == 1 and lists2[1][y][x] != [-1]:
+                        convertinto = 0
+                        for r in lists2[1][y][x]:
+                            convertinto = r
+                        for xchange in range(9):
+                            if lists2[1][y][xchange].__contains__(convertinto) and lists2[1][y][xchange].__len__() != 1:
+                                lists2[1][y][xchange].remove(convertinto)     
+
+        # if single in block, take out other possibilities 
+        for blockno in range(1,10):
+            singleLine =[]
+            self.block(blockno)
+            for y in range(3):
+                for x in range(3):
+                    if lists2[1][y+fy][x+fx].__len__() != 1:
+                        for o in lists2[1][y+fy][x+fx]:
+                            singleLine.append(o)
+            for a in singleLine:
+                if singleLine.count(a) == 1:
+                    for y in range(3):
+                        for x in range(3):
+                                for b in lists2[1][y+fy][x+fx]:
+                                    if a == b:
+                                        continue
+                                    else:
+                                        if lists2[1][y+fy][x+fx].__contains__(a):
+                                            lists2[1][y+fy][x+fx].remove(b)
+
+
+        ## only double in single row kicks out other shit
+        for y in range(9):
+            print(lists2[1][y])
+            if y == 2 or y ==5:
+                print(" ")
+        print(" ")
+        print(" ")
+        for blockno in range(1,10):
+            self.block(blockno)      
+            singleLine=[]
+            singles = []
+            for y in range(3):
+                for x in range(3):
+                    if lists2[1][y+fy][x+fx].__len__() != 1:
+                        for q in lists2[1][y+fy][x+fx]:
+                            singleLine.append(q)
+
+                    if lists2[1][y+fy][x+fx].__len__() == 1 and lists2[1][y+fy][x+fx] != -1:
+                        for k in lists2[1][y+fy][x+fx]:
+                            singles.append(k)
+            
+                
+            for q in singleLine:
+                counter = 0
+                for a in singleLine:
+                    if q == a:
+                        counter +=1
+                        if counter != 1:
+                            singleLine.remove(q)
+
+            for k in singles:
+                    if singleLine.__contains__(k):
+                        singleLine.remove(k)
+
+            for q in singleLine:
+                firstrow = 0
+                secondrow = 0
+                thirdrow = 0
+                for y in range(3):
+                    for x in range(3):
+                        if lists2[1][y+fy][x+fx] != 0 and lists2[1][y+fy][x+fx].__len__() != 1:
+                            if lists2[1][y+fy][x+fx].__contains__(q):
+                                if y == 0:
+                                    firstrow += 1
+                                        
+                                if y == 1:
+                                    secondrow += 1
+                                        
+                                if y == 2:
+                                    thirdrow += 1
+
+                row_sum = firstrow + secondrow + thirdrow
+                if row_sum < 4 and row_sum > 1:
+                    if (firstrow + secondrow) == 0 and thirdrow ==2:
+                        for x in range(9):
+                            if fx == 0:
+                                if x < 3:
+                                    continue
+                            if fx == 3:
+                                if x >= 3 and x < 6:
+                                    continue
+                            if fx == 6:
+                                if x >= 6:
+                                    continue
+                            if lists2[1][2+fy][x].__contains__(q):
+                                lists2[1][2+fy][x].remove(q)
+                                print("hi 11111111")
+                                
+                                        
+                    if (thirdrow + secondrow) == 0 and firstrow ==2:
+                        for x in range(9):
+                            if fx == 0:
+                                if x < 3:
+                                    continue
+                            if fx == 3:
+                                if x >= 3 and x < 6:
+                                    continue
+                            if fx == 6:
+                                if x >= 6:
+                                    continue
+                            if lists2[1][0+fy][x].__contains__(q):
+                                lists2[1][0+fy][x].remove(q)
+                                print("hi 22222222222")
+                                print(q)
+                                print(fx)
+                                print(fy)
+                                print(firstrow)
+                                print(secondrow)
+                                print(thirdrow)
+                                print(" ")
+                                
+                                        
+                    if (firstrow + thirdrow) == 0 and secondrow ==2:
+                        for x in range(9):
+                            if fx == 0:
+                                if x < 3:
+                                    continue
+                            if fx == 3:
+                                if x >= 3 and x < 6:
+                                    continue
+                            if fx == 6:
+                                if x >= 6:
+                                    continue
+                            if lists2[1][1+fy][x].__contains__(q):
+                                lists2[1][1+fy][x].remove(q)
+                                print("hi 33333333333333")
         
-    
+        # removing douples in the y axis   
+        for blockno in range(3,4):
+            self.block(blockno)      
+            singleLine=[]
+            singles = []
+            for y in range(3):
+                for x in range(3):
+                    if lists2[1][y+fy][x+fx].__len__() != 1:
+                        for q in lists2[1][y+fy][x+fx]:
+                            singleLine.append(q)
+
+                    if lists2[1][y+fy][x+fx].__len__() == 1 and lists2[1][y+fy][x+fx] != -1:
+                        for k in lists2[1][y+fy][x+fx]:
+                            singles.append(k)
+            
+                
+            for q in singleLine:
+                counter = 0
+                for a in singleLine:
+                    if q == a:
+                        counter +=1
+                        if counter != 1:
+                            singleLine.remove(q)
+
+            for k in singles:
+                    if singleLine.__contains__(k):
+                        singleLine.remove(k)
+
+            for q in singleLine:
+                firstcolumn = 0
+                secondcolumn = 0
+                thirdcolumn = 0
+                for y in range(3):
+                    for x in range(3):
+                        if lists2[1][fy+y][fx+x].__len__() != 1:
+                            if lists2[1][fy+y][fx+x].__contains__(q):
+                                if x == 0:
+                                    firstcolumn += 1
+                                        
+                                if x == 1:
+                                    secondcolumn += 1
+                                        
+                                if x == 2:
+                                    thirdcolumn += 1
+                    
+
+                column_sum = firstcolumn + secondcolumn + thirdcolumn
+                print("y "+str(y))
+                print(q)
+                print(" ")
+                print(firstcolumn)
+                print(secondcolumn)
+                print(thirdcolumn)
+                print(" ")
+                if column_sum < 4 and column_sum > 1:
+                    if (firstcolumn + secondcolumn) == 0 and thirdcolumn ==2:
+                        for y in range(9):
+                            if fy == 0:
+                                if y < 3:
+                                    continue
+                            if fy == 3:
+                                if y >= 3 and y < 6:
+                                    continue
+                            if fy == 6:
+                                if y >= 6:
+                                    continue
+                            if lists2[1][y][2+fx].__contains__(q):
+                                lists2[1][y][2+fx].remove(q)
+                                print("giiiii 11111")
+                                print(" ")
+                                
+                                        
+                    if (thirdcolumn + secondcolumn) == 0 and firstcolumn ==2:
+                        for y in range(9):
+                            if fy == 0:
+                                if y < 3:
+                                    continue
+                            if fy == 3:
+                                if y >= 3 and y < 6:
+                                    continue
+                            if fy == 6:
+                                if y >= 6:
+                                    continue
+                            if lists2[1][y][fx+0].__contains__(q):
+                                lists2[1][y][fx+0].remove(q)
+                                print("giiiii 222222")
+                                print(q)
+                                print(fx)
+                                print(fy)
+                                print(firstrow)
+                                print(secondrow)
+                                print(thirdrow)
+                                print(" ")
+                                print(y)
+                                
+                                
+                                        
+                    if (firstcolumn + thirdcolumn) == 0 and secondcolumn ==2:
+                        for y in range(9):
+                            if fy == 0:
+                                if y < 3:
+                                    continue
+                            if fy == 3:
+                                if y >= 3 and y < 6:
+                                    continue
+                            if fy == 6:
+                                if y >= 6:
+                                    continue
+                            if lists2[1][y][fx+1].__contains__(q):
+                                lists2[1][y][fx+1].remove(q)  
+                                print("giiiii 33333")
+                                print(" ")                            
+                            
+        for y in range(9):
+            print(lists2[1][y])
+            if y == 2 or y ==5:
+                print(" ")
+        print(" ")
+        print(" ")
+
+
+        
 def num():
     global xcounter
     global ycounter
     global board
     board = [
-    [0,9,4, 0,3,0, 1,0,0],
-    [8,1,2, 7,0,0, 0,9,6],
-    [3,0,0, 1,9,0, 0,0,0],
+    [0,0,0, 0,3,0, 0,9,0],
+    [7,5,0, 0,2,0, 1,0,3],
+    [0,0,3, 0,0,8, 0,5,6],
 
-    [0,3,0, 9,0,4, 6,0,0],
-    [0,0,8, 6,1,3, 0,4,9],
-    [0,0,6, 2,0,0, 0,0,1],
+    [3,0,0, 0,0,0, 0,0,0],
+    [5,4,6, 0,0,0, 8,3,2],
+    [8,0,0, 2,0,3, 0,0,0],
 
-    [4,0,3, 5,0,0, 0,0,8],
-    [5,0,0, 0,2,0, 7,0,0],
-    [0,6,0, 0,0,8, 4,1,5]
+    [0,7,8, 0,5,0, 0,0,0],
+    [0,0,0, 0,7,6, 5,4,0],
+    [4,0,5, 0,0,0, 0,7,9]
     ]
     xcounter = xcounter +1
     if xcounter == 9:
@@ -176,13 +456,36 @@ def num():
         board[ycounter][xcounter] = ""
     return board[ycounter][xcounter]
 
+
+def callingalgo(num):
+    algo = algorithm()
+    algo.setpossibilities()
+    for r in range(num):
+        algo.checkremove()
+    counter = 0
+    anotherlist = []
+    global listsfinal
+    listsfinal = []
+    for y in range(9):
+        for x in range(9):
+            if lists2[1][y][x].__len__() == 1:
+                if lists2[1][y][x] == [-1]:
+                    continue
+                counter += 1
+                for s in lists2[1][y][x]:
+                    a = str(s)
+                anotherlist.append([x, y, a])
+
+    for y in range(counter):
+        da = box(anotherlist[y][0] * 50, anotherlist[y][1] * 50, 50, 50, anotherlist[y][2], lightblue)
+        listsfinal.append(da)
     
+
 def main():
     clock = pg.time.Clock()
     highlight_boxes = []
     boxes = []
     run = True
-
     for y in range(0,450,50):
         for x in range(0,450,50):
             box1 = box(x,y,50,50,str(num()), black)
@@ -192,33 +495,7 @@ def main():
         for y in range(0,450,150):
             box1 = highlightbox(x,y,150,150)
             highlight_boxes.append(box1)
-    algo = algorithm()
-    algo.setpossibilities()
-    algo.checkremove()
-    algo.checkremove()
-    algo.checkremove()
-    
-    counter = 0
-    anotherlist = []
-    listsfinal = []
-    for y in range(9):
-        for x in range(9):
-            if lists2[1][y][x].__len__() == 1:
-                if lists2[1][y][x] == [-1]:
-                    continue
-                print(str(lists2[1][y][x])+" "+str(y) +" "+str(x))
-                counter += 1
-                for s in lists2[1][y][x]:
-                    a = str(s)
-                anotherlist.append([x, y, a])
-    print(anotherlist)
-
-    for y in range(counter):
-        da = box(anotherlist[y][0] * 50, anotherlist[y][1] * 50, 50, 50, anotherlist[y][2], lightblue)
-        listsfinal.append(da)
-
-
-
+    callingalgo(6)
 
     while run:
         for event in pg.event.get():
@@ -228,12 +505,12 @@ def main():
                 z.inputs(event)
        
         window.fill(pg.Color("white"))
+        
         for rectan in boxes:
             rectan.draw(window)
 
         for rectan in highlight_boxes:
             rectan.draw(window)
-
         for rectan in listsfinal:
             rectan.draw(window)
         """
@@ -253,3 +530,28 @@ def main():
         clock.tick(FPS)
     pg.quit()
 main()
+[[6], [8], [2, 4], [1, 4, 5, 7], [-1], [1, 5, 7], [2, 4, 7], [-1], [4, 7]]
+[[-1], [-1], [4], [6], [-1], [9], [-1], [8], [-1]]
+[[1, 2], [2, 9], [-1], [1, 4, 7], [4, 9], [-1], [2, 4, 7], [-1], [-1]]
+
+[[-1], [1, 2, 9], [1, 2, 7, 9], [1, 4, 5, 7, 8], [1, 4, 6, 8, 9], [1, 5, 7, 9], [4, 6, 7, 9], [1, 6], [4, 7]]
+[[-1], [-1], [-1], [1, 7], [1, 9], [1, 7, 9], [-1], [-1], [-1]]
+[[-1], [1, 9], [1, 7, 9], [-1], [1, 4, 6, 9], [-1], [4, 6, 7, 9], [1, 6], [5]]
+
+[[9], [-1], [-1], [3], [-1], [4], [6], [2], [1]]
+[[1, 2], [1, 2, 3], [1, 2], [9], [-1], [-1], [-1], [-1], [8]]
+[[-1], [6], [-1], [1, 8], [1, 8], [2], [3], [-1], [-1]]
+
+
+
+[[6], [8], [2], [1, 5], [-1], [1, 5], [4, 7], [-1], [4, 7]]
+[[-1], [-1], [4], [6], [-1], [9], [-1], [8], [-1]]
+[[1], [9], [-1], [1, 7], [4], [-1], [2], [-1], [-1]]
+
+[[-1], [2], [7, 9], [4, 7], [1, 6, 8, 9], [1, 5, 7], [4, 7, 9], [1, 6], [4, 7]]
+[[-1], [-1], [-1], [1, 7], [1, 9], [1, 7], [-1], [-1], [-1]]
+[[-1], [1, 9], [7, 9], [-1], [1, 6, 9], [-1], [4, 7, 9], [1, 6], [5]]
+
+[[9], [-1], [-1], [3], [-1], [4], [6], [2], [1]]
+[[2], [2], [1], [9], [-1], [-1], [-1], [-1], [8]]
+[[-1], [6], [-1], [1, 8], [1, 8], [2], [3], [-1], [-1]]
