@@ -159,6 +159,7 @@ class algorithm:
                             for b in range(3):
                                 if lists2[1][fy+a][fx+b].__contains__(convertinto) and lists2[1][fy+a][fx+b].__len__() != 1:
                                     lists2[1][fy+a][fx+b].remove(convertinto)
+        
         for y in range(9):
             for x in range(9):
                 if lists2[1][y][x].__len__() == 1 and lists2[1][y][x] != [-1]:
@@ -179,14 +180,23 @@ class algorithm:
                                 lists2[1][y][xchange].remove(convertinto)     
 
         # if single in block, take out other possibilities 
+        
         for blockno in range(1,10):
-            singleLine =[]
+            singleLine = []
+            singles = []
             self.block(blockno)
             for y in range(3):
                 for x in range(3):
                     if lists2[1][y+fy][x+fx].__len__() != 1:
                         for o in lists2[1][y+fy][x+fx]:
                             singleLine.append(o)
+                    else: 
+                        for o in lists2[1][y+fy][x+fx]:
+                            singles.append(o)
+            for o in singleLine:
+                for a in singles:
+                    if o == a:
+                        singleLine.remove(a)
             for a in singleLine:
                 if singleLine.count(a) == 1:
                     for y in range(3):
@@ -197,15 +207,11 @@ class algorithm:
                                     else:
                                         if lists2[1][y+fy][x+fx].__contains__(a):
                                             lists2[1][y+fy][x+fx].remove(b)
+                                           
 
 
         ## only double in single row kicks out other shit
-        for y in range(9):
-            print(lists2[1][y])
-            if y == 2 or y ==5:
-                print(" ")
-        print(" ")
-        print(" ")
+        
         for blockno in range(1,10):
             self.block(blockno)      
             singleLine=[]
@@ -265,7 +271,6 @@ class algorithm:
                                     continue
                             if lists2[1][2+fy][x].__contains__(q):
                                 lists2[1][2+fy][x].remove(q)
-                                print("hi 11111111")
                                 
                                         
                     if (thirdrow + secondrow) == 0 and firstrow ==2:
@@ -281,14 +286,7 @@ class algorithm:
                                     continue
                             if lists2[1][0+fy][x].__contains__(q):
                                 lists2[1][0+fy][x].remove(q)
-                                print("hi 22222222222")
-                                print(q)
-                                print(fx)
-                                print(fy)
-                                print(firstrow)
-                                print(secondrow)
-                                print(thirdrow)
-                                print(" ")
+                                
                                 
                                         
                     if (firstrow + thirdrow) == 0 and secondrow ==2:
@@ -304,7 +302,6 @@ class algorithm:
                                     continue
                             if lists2[1][1+fy][x].__contains__(q):
                                 lists2[1][1+fy][x].remove(q)
-                                print("hi 33333333333333")
         
         # removing douples in the y axis   
         for blockno in range(3,4):
@@ -353,13 +350,7 @@ class algorithm:
                     
 
                 column_sum = firstcolumn + secondcolumn + thirdcolumn
-                print("y "+str(y))
-                print(q)
-                print(" ")
-                print(firstcolumn)
-                print(secondcolumn)
-                print(thirdcolumn)
-                print(" ")
+                
                 if column_sum < 4 and column_sum > 1:
                     if (firstcolumn + secondcolumn) == 0 and thirdcolumn ==2:
                         for y in range(9):
@@ -374,8 +365,6 @@ class algorithm:
                                     continue
                             if lists2[1][y][2+fx].__contains__(q):
                                 lists2[1][y][2+fx].remove(q)
-                                print("giiiii 11111")
-                                print(" ")
                                 
                                         
                     if (thirdcolumn + secondcolumn) == 0 and firstcolumn ==2:
@@ -391,15 +380,7 @@ class algorithm:
                                     continue
                             if lists2[1][y][fx+0].__contains__(q):
                                 lists2[1][y][fx+0].remove(q)
-                                print("giiiii 222222")
-                                print(q)
-                                print(fx)
-                                print(fy)
-                                print(firstrow)
-                                print(secondrow)
-                                print(thirdrow)
-                                print(" ")
-                                print(y)
+                              
                                 
                                 
                                         
@@ -416,17 +397,7 @@ class algorithm:
                                     continue
                             if lists2[1][y][fx+1].__contains__(q):
                                 lists2[1][y][fx+1].remove(q)  
-                                print("giiiii 33333")
-                                print(" ")                            
-                            
-        for y in range(9):
-            print(lists2[1][y])
-            if y == 2 or y ==5:
-                print(" ")
-        print(" ")
-        print(" ")
-
-
+                                                           
         
 def num():
     global xcounter
@@ -495,7 +466,7 @@ def main():
         for y in range(0,450,150):
             box1 = highlightbox(x,y,150,150)
             highlight_boxes.append(box1)
-    callingalgo(6)
+    callingalgo(20)
 
     while run:
         for event in pg.event.get():
@@ -530,28 +501,3 @@ def main():
         clock.tick(FPS)
     pg.quit()
 main()
-[[6], [8], [2, 4], [1, 4, 5, 7], [-1], [1, 5, 7], [2, 4, 7], [-1], [4, 7]]
-[[-1], [-1], [4], [6], [-1], [9], [-1], [8], [-1]]
-[[1, 2], [2, 9], [-1], [1, 4, 7], [4, 9], [-1], [2, 4, 7], [-1], [-1]]
-
-[[-1], [1, 2, 9], [1, 2, 7, 9], [1, 4, 5, 7, 8], [1, 4, 6, 8, 9], [1, 5, 7, 9], [4, 6, 7, 9], [1, 6], [4, 7]]
-[[-1], [-1], [-1], [1, 7], [1, 9], [1, 7, 9], [-1], [-1], [-1]]
-[[-1], [1, 9], [1, 7, 9], [-1], [1, 4, 6, 9], [-1], [4, 6, 7, 9], [1, 6], [5]]
-
-[[9], [-1], [-1], [3], [-1], [4], [6], [2], [1]]
-[[1, 2], [1, 2, 3], [1, 2], [9], [-1], [-1], [-1], [-1], [8]]
-[[-1], [6], [-1], [1, 8], [1, 8], [2], [3], [-1], [-1]]
-
-
-
-[[6], [8], [2], [1, 5], [-1], [1, 5], [4, 7], [-1], [4, 7]]
-[[-1], [-1], [4], [6], [-1], [9], [-1], [8], [-1]]
-[[1], [9], [-1], [1, 7], [4], [-1], [2], [-1], [-1]]
-
-[[-1], [2], [7, 9], [4, 7], [1, 6, 8, 9], [1, 5, 7], [4, 7, 9], [1, 6], [4, 7]]
-[[-1], [-1], [-1], [1, 7], [1, 9], [1, 7], [-1], [-1], [-1]]
-[[-1], [1, 9], [7, 9], [-1], [1, 6, 9], [-1], [4, 7, 9], [1, 6], [5]]
-
-[[9], [-1], [-1], [3], [-1], [4], [6], [2], [1]]
-[[2], [2], [1], [9], [-1], [-1], [-1], [-1], [8]]
-[[-1], [6], [-1], [1, 8], [1, 8], [2], [3], [-1], [-1]]
